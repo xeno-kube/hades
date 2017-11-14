@@ -31,6 +31,12 @@ spec:
           - containerPort: 8000
 ```
 
+Using the file above, run the following command.
+
+```
+kubectl apply -f deploy_hades.yaml
+```
+
 Hades needs a kubeconfig YAML and relevant authentication files.
 This is so that Hades can delete the pods from your cluster.
 
