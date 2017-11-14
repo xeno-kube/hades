@@ -4,8 +4,6 @@ Hades is responsible for disposing of running pods within your kubernetes enviro
 
 Version 1.0.0
 
-Currently in development.
-
 ## Starting Hades
 To start Hades, use a YAML file like the one below to deploy it to your kubernetes cluster.
 
@@ -28,7 +26,7 @@ spec:
     spec:
       containers:
       - name: hades
-        image: xeno-kube/hades:1.0.0
+        image: xenokube/hades:1.0.0
         ports:
           - containerPort: 8000
 ```
