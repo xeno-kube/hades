@@ -5,9 +5,7 @@ MAINTAINER riderstrider001@gmail.com
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
 # add kill script
-ADD pod_kill/kill_random_pod /usr/local/bin/kill_random_pod
-
-ADD dashboard /dashboard
+ADD kill_random_pod /usr/local/bin/kill_random_pod
 
 RUN echo "updating container" \
  && apk -q update \
@@ -27,20 +25,17 @@ RUN echo "updating container" \
  && rm -f /stable.txt \
  && chmod +x /usr/local/bin/kubectl \
 #
- && echo "installing nodejs" \
- && apk -q add nodejs \
-#
   && echo "initialising hades_activity.log" \
-  && echo "--- initialising Hades ---" > /hades_activity.log \
+  && echo "[$(date)] --- initialising Hades ---" > /hades_activity.log \
 #
  && echo "making kill and stress scripts executable" \
  && chmod +x /usr/local/bin/kill_random_pod \
 #
  && echo "creating cron job for pod kill" \
- && echo "*/5 * * * * /usr/local/bin/kill_random_pod" > /etc/crontabs/root \
+ && echo "* * * * * /usr/local/bin/kill_random_pod" > /etc/crontabs/root \
 #
- && echo "starting cron" \
- && crond -b \
+ && echo "creating cron job for log truncation" \
+ && echo "5 1 * * 0 echo '' > /hades_activity.log" >> /etc/crontabs/root \
 #
  && echo "making docker-entrypoint.sh executable" \
  && chmod +x /docker-entrypoint.sh \

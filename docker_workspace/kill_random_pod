@@ -1,0 +1,42 @@
+#!/bin/sh
+
+if [ ! -f /root/.kube/config ]
+then
+  echo "[$(date)] I require a file... /root/.kube/config" >> /hades_activity.log
+  exit 0
+fi
+
+pods=$(kubectl get po | grep Running | grep -v hades | awk '{print $1}')
+
+if [ "$pods" != "NAME"*"READY"*"STATUS"*"RESTARTS"*"AGE"* ]
+then
+  echo "[$(date)] Data is not what I expected." >> /hades_activity.log
+  echo "$pods" >> /hades_activity.log
+  echo "[$(date)] Check your kubeconfig and other auth files." >> /hades_activity.log
+  exit 1
+fi
+
+num=$(echo $pods | wc -w)
+
+mod=$(( $RANDOM % $num ))
+
+target=$(echo $pods | awk "{print \$$mod}")
+
+echo "[$(date)] killing $target..." >> /hades_activity.log
+
+kubectl delete po $target --force
+
+synonyms[0]='destroyed'
+synonyms[1]='annihilated'
+synonyms[2]='obliterated'
+synonyms[3]='slaughtered'
+synonyms[4]='eliminated'
+synonyms[5]='eradicated'
+synonyms[6]='extinguished'
+synonyms[7]='exterminated'
+synonyms[8]='vaporized'
+synonyms[9]='crushed'
+
+syn_mod=$(( $RANDOM % 10 ))
+
+echo "[$(date)] I have ${synonyms[${syn_mod}]} ${target}" >> /hades_activity.log

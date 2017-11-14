@@ -1,7 +1,9 @@
 #!/bin/sh
 
-echo $1 >> /hades_activity.log
+echo "[$(date)] $1" >> /hades_activity.log
 
-echo "--- starting Hades ---" >> /hades_activity.log
+echo "[$(date)] --- starting Hades ---" >> /hades_activity.log
 
-node /dashboard/bin/www
+crond -b
+
+tail -F /hades_activity.log
